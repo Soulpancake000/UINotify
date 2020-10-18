@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_8899_ui_notify.ServerSentAjax</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>ServerSentAjax</name>
+        <script><![CDATA[var ServerSentAjax = Class.create();
+ServerSentAjax.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+
+    getTransactionSubscriptions: function (url, location) {
+        var result = { url: "", subscriptions: [] };
+        url = gs.nil(url) ? this.getParameter('sysparm_url') : url;
+        location = gs.nil(location) ? this.getParameter("sysparm_location") : location;
+        result.url = url;
+        var subscriptions = [];
+        var userSid = String(gs.getUserID());
+        var gr = new GlideRecord('x_8899_ui_notify_transaction_subscription');
+        gr.addQuery('user', userSid);
+        gr.addNotNullQuery('event_name');
+        gr.addNotNullQuery('record_key');
+        gr.query();
+        while (gr.next()) {
+            subscriptions.push({ event_name: String(gr.event_name), record_sid: String(gr.record_key) });
+        }
+        result.subscriptions = subscriptions;
+        return JSON.stringify(result);
+    },
+
+    deleteTransactionSubscription: function () {
+        var recordKey = this.getParameter("sysparm_instance");
+        var userSid = String(gs.getUserID());
+
+        var gr = new GlideRecord('x_8899_ui_notify_transaction_subscription');
+        gr.addQuery('user', userSid);
+        gr.addQuery('record_key', String(recordKey));
+        gr.query();
+        if (gr.next()) {
+            gr.deleteRecord();
+        }
+    },
+
+    type: 'ServerSentAjax'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 15:06:40</sys_created_on>
+        <sys_id>24e79df32f3b501064e63f96f699b62b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ServerSentAjax</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_update_name>sys_script_include_24e79df32f3b501064e63f96f699b62b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 15:06:40</sys_updated_on>
+        <u_callback_class>false</u_callback_class>
+    </sys_script_include>
+</record_update>

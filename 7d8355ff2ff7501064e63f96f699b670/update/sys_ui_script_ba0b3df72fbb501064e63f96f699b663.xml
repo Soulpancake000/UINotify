@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_script">
+    <sys_ui_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <description>This UI Script should be created in the global application scope and marked as Global as well.</description>
+        <global>false</global>
+        <name>x_8899_ui_notify.UINotifyMessage</name>
+        <script><![CDATA[// UINotifyMessage | UI Script | Global
+if (typeof ($j) != 'undefined') { // Validate that JQuery object is available
+    $j(document).ready(function () { // Wait for document to be ready
+        var ServerSentUI = Class.create();
+        ServerSentUI.prototype = {
+            initialize: function (initializeThis) {
+                // Validate that the Browser supports ServerSent protocol 
+                if (!!window.EventSource && initializeThis) {
+                    this.instanceURL = 'https://' + String(window.location.hostname);
+                    console.log("instanceURL: " + this.instanceURL);
+                    this.ssURL = String(this.instanceURL) + "/x_8899_ui_notify_serversent.do";
+                    console.log("ssURL: " + this.ssURL);
+                    this.sources = this._instantiateEventSources();
+                    //console.log("sources: " + this.sources.length);
+                }
+            },
+
+            _registerEventHandlers: function () {
+                // Validate the sources array exists and has a source defined
+                if (this.sources != 'undefined' && this.sources.length > 0) {
+                    // For each source register three event listeners. message, open, error
+                    for (var i = 0; i < this.sources.length; i++) {
+                        try {
+                            var processedIDs = [];
+                            // Register the Message Event Listener
+                            this.sources[i].addEventListener('message', function (e) {
+                                var data = JSON.parse(e.data);
+                                if (processedIDs.toString().indexOf(e.lastEventId) > -1) { }
+                                else {
+                                    console.log(data.id, data.message);
+                                    //console.log("typeof($j): " + document.getElementsByTagName("body")[0].firstChild.innerText);
+                                    var child = document.getElementsByTagName("body")[0].firstChild;
+                                    var newElement = document.createElement("div");
+
+                                    newElement.setAttribute("id", "output_messages");
+                                    newElement.setAttribute("class", "outputmsg_container");
+                                    newElement.setAttribute("style", "display: block; width: 98%; position: fixed; z-index: 20; padding-top:40px");
+                                    var innerHTML = '<h2 class="sr-only">Notifications</h2>';
+                                    innerHTML += '<button class="btn btn-icon close icon-cross" ';
+                                    innerHTML += 'onclick="GlideUI.get().clearOutputMessages(this); ';
+                                    innerHTML += 'var ga = new GlideAjax(\'x_8899_ui_notify.ServerSentAjax\'); ';
+                                    innerHTML += 'ga.addParam(\'sysparm_name\', \'deleteTransactionSubscription\'); ';
+                                    innerHTML += 'ga.addParam(\'sysparm_instance\', \'' + String(data.instance) + '\'); ';
+                                    innerHTML += 'ga.getXML(null); ';
+                                    innerHTML += 'document.getElementById(\'output_messages\').remove(); ';
+                                    innerHTML += 'return false; ">';
+                                    innerHTML += '<span class="sr-only">Close Messages"</span ></button > ';
+                                    innerHTML += '<div class="outputmsg_div">';
+                                    innerHTML += '<div class="outputmsg outputmsg_info notification notification-info">';
+                                    innerHTML += '<span class="notification-icon icon-info">';
+                                    innerHTML += '<span class="sr-only">Info Message</span></span>';
+                                    innerHTML += '<div class="outputmsg_text"><p><strong>' + String(data.message) + '</strong></p>';
+                                    innerHTML += '</div></div></div>';
+                                    newElement.innerHTML = innerHTML;
+                                    document.getElementsByTagName("body")[0].insertBefore(newElement, child);
+                                    processedIDs.push(String(e.lastEventId));
+                                }
+                            }, false);
+
+                            // Register the Open Event Listener
+                            this.sources[i].addEventListener('open', function (e) {
+                                // console.log("ServerSent Connection Opened successfully!");
+                            }, false);
+
+                            // Register the Error Event Listener
+                            this.sources[i].addEventListener('error', function (e) {
+                                if (e.readyState == EventSource.CLOSED) {
+                                    // Connection was closed.
+                                    //console.log("ServerSent Connection Was Closed!");
+                                }
+                                else {
+                                    //console.log("ServerSent Error Encountered!: " + e.readyState + " " + e.data);
+                                }
+
+                            }, false);
+                            console.log("Event Listeners added for " + this.sources[i].url);
+                        }
+                        catch (err) {
+                            console.log("Error adding Event Handlers: " + err.message);
+                        }
+                    }
+                }
+            },
+
+            _instantiateEventSources: function () {
+                // Instantiate Event Sources from the Transaction Subscription table
+                var ga = new GlideAjax('x_8899_ui_notify.ServerSentAjax');
+                ga.addParam("sysparm_name", 'getTransactionSubscriptions');
+                ga.addParam("sysparm_url", String(this.ssURL));
+                ga.getXML(instantiateEventSources);
+
+                function instantiateEventSources(response) {
+                    var sources = [];
+                    var rawValue = response.responseXML.documentElement.getAttribute("answer");
+                    console.log("rawValue: " + rawValue);
+                    if (typeof (rawValue) != "undefined" && rawValue != null && rawValue != "null") {
+                        var result = JSON.parse(String(rawValue));
+                        // Validate that result and result.subscriptions is not null/undefined
+                        if (typeof (result) != 'undefined' && result != null && typeof (result.subscriptions) != 'undefined' && result.subscriptions.length > 0) {
+                            var subscriptions = result.subscriptions;
+                            console.log("subscriptions.length: " + subscriptions.length);
+                            /** For each subscription:
+                             *  1. Construct the serversent processor eventURL
+                             *  2. Push an instantiated EventSource object into the sources array.
+                             *  */
+                            for (var i = 0; i < subscriptions.length; i++) {
+                                if (String(subscriptions[i].event_name) != 'undefined' && String(subscriptions[i].event_name) != "" && String(subscriptions[i].record_sid) != "undefined" && String(subscriptions[i].record_sid) != "") {
+                                    var eventURL = String(result.url) + "?event_subscription=" + String(subscriptions[i].event_name) + "&record_sid=" + String(subscriptions[i].record_sid);
+                                    console.log("eventURL: " + eventURL);
+                                    try {
+                                        sources.push(new EventSource(eventURL)); // Instantiate and push EventSource to sources array
+                                        console.log("Pushed EventSource!");
+                                    }
+                                    catch (err) {
+                                        console.log("Error creating EventSource: " + err.message);
+                                    }
+                                }
+                            }
+                            console.log("Done creating EventSources from subscriptions!");
+
+                            // Call remaining functions - Callback function no access to the original SSUI object
+                            console.log("typeof(uiMessageUtil): " + typeof (uiMessageUtil));
+                            uiMessageUtil.sources = sources;
+                            uiMessageUtil.processedIDs = [];
+                            uiMessageUtil._registerEventHandlers();
+                        }
+                    }
+                }
+            },
+
+            type: 'ServerSentUI'
+        };
+
+        var uiMessageUtil = new ServerSentUI(true);
+    });
+}]]></script>
+        <script_name>UINotifyMessage</script_name>
+        <sys_class_name>sys_ui_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 17:40:48</sys_created_on>
+        <sys_id>ba0b3df72fbb501064e63f96f699b663</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_8899_ui_notify.UINotifyMessage</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_update_name>sys_ui_script_ba0b3df72fbb501064e63f96f699b663</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 17:40:48</sys_updated_on>
+        <ui_type>0</ui_type>
+        <use_scoped_format>false</use_scoped_format>
+    </sys_ui_script>
+</record_update>

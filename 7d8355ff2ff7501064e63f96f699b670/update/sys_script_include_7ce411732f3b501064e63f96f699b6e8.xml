@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_8899_ui_notify.UINotifyUtil</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>UINotifyUtil</name>
+        <script><![CDATA[var UINotifyUtil = Class.create();
+UINotifyUtil.prototype = {
+    initialize: function() {},
+    /**
+     * 
+     * @param {string} eventName - Name of the sysevent to subscribe to
+     * @param {string} table - Source table the sysevent was triggered against
+     * @param {string} recordKey - Source record sys_id the sysevent was triggered against
+     * @param {string} transactionId - Transaction ID pertinent to the sysevent, if applicable
+     * @param {string} executingUser - User subscribing to the sysevent
+     */
+    createTransactionSubscription: function(eventName, table, recordKey, transactionId, executingUser) {
+        var gr = new GlideRecord("x_8899_ui_notify_transaction_subscription");
+        gr.addQuery('event_name', eventName);
+        gr.addQuery('table', table);
+        gr.addQuery('record_key', recordKey);
+        gr.addQuery('transaction_id', transactionId);
+        gr.addQuery('user', executingUser);
+        gr.query();
+        if (gr.getRowCount() > 0) {
+            // Do nothing - Subscription already exists
+        } else {
+            gs.info('Int: Creating Transaction Subscription');
+            if (!gs.nil(executingUser)) {
+                gr.initialize();
+                gr.event_name = String(eventName);
+                gr.table = String(table);
+                gr.record_key = String(recordKey);
+                gr.transaction_id = String(transactionId);
+                gr.user = executingUser;
+                gs.info(gr.insert());
+            }
+        }
+    },
+
+    /**
+     * 
+     * @param {object} parmObj - custom parameter object passed in from callback function
+     * @param {object} responseObj - custom response object used in async calls 
+     */
+    triggerNotifyEvent: function(parmObj, responseObj) {
+		var message = "";
+        if (responseObj.status == 200) {
+            var parsedResponse = JSON.parse(responseObj.responseBody);
+            message = "Successful async response: " + JSON.stringify(parsedResponse);
+            gs.eventQueue("x_8899_ui_notify.async_call_complete", parmObj.current, message, null);
+        } else {
+            //Failure!
+			message = "Failed async response: " + responseObj.status;
+            gs.eventQueue("x_8899_ui_notify.async_call_complete", parmObj.current, message, null);
+        }
+    },
+
+    type: 'UINotifyUtil'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 14:53:44</sys_created_on>
+        <sys_id>7ce411732f3b501064e63f96f699b6e8</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>UINotifyUtil</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_update_name>sys_script_include_7ce411732f3b501064e63f96f699b6e8</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 14:53:44</sys_updated_on>
+        <u_callback_class>false</u_callback_class>
+    </sys_script_include>
+</record_update>

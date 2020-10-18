@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl">
+    <sys_security_acl action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <admin_overrides>true</admin_overrides>
+        <advanced>false</advanced>
+        <condition/>
+        <description>Default access control on x_8899_ui_notify_transaction_subscription</description>
+        <name>x_8899_ui_notify_transaction_subscription</name>
+        <operation display_value="create">create</operation>
+        <script/>
+        <sys_class_name>sys_security_acl</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 14:49:22</sys_created_on>
+        <sys_id>11049dff2ff7501064e63f96f699b606</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_8899_ui_notify_transaction_subscription</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_update_name>sys_security_acl_11049dff2ff7501064e63f96f699b606</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 14:49:22</sys_updated_on>
+        <type display_value="record">record</type>
+    </sys_security_acl>
+</record_update>

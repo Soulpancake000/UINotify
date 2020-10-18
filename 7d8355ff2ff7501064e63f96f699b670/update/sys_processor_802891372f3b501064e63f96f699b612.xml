@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_processor">
+    <sys_processor action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <class_name/>
+        <description/>
+        <interactive>false</interactive>
+        <name>ServerSent</name>
+        <parameters/>
+        <params_endpoint/>
+        <path>serversent</path>
+        <path_endpoint>x_8899_ui_notify_serversent</path_endpoint>
+        <require_csrf>false</require_csrf>
+        <roles/>
+        <script><![CDATA[(function process(g_request, g_response, g_processor) {
+    // Event name from the sysevent table you wish to subscribe to
+    var subscribedEvent = g_request.getParameter("event_subscription");
+    // sys_id of the record that will trigger the event in the sysevent table. The value in the .instance field.
+    var subscribedRecord = g_request.getParameter("record_sid");
+
+    // Setup headers for ServerSent responses
+    g_response.setContentType("text/event-stream");
+    g_response.setHeader("Cache-Control", "no-cache");
+    g_response.setHeader("Connection", "keep-alive");
+    g_response.setHeader("Access-Control-Allow-Origin", "*"); // CORS [Cross Origin Resource Sharing]
+
+    // Test if the subscribed event has fired, and if so send notification to subscribed client browser
+    eventFired(subscribedEvent, subscribedRecord);
+
+    function eventFired(eventName, recordSid) {
+        // Query the sysevent table for the target event.
+        // Query for a specific record that the event was triggered against.
+        // Query for the target event triggered within the current minute.
+        var query = "name=" + eventName + "^instance=" + recordSid + "^sys_created_onONCurrent minute@javascript:gs.beginningOfCurrentMinute()@javascript:gs.endOfCurrentMinute()^ORsys_created_onONLast minute@javascript:gs.beginningOfLastMinute()@javascript:gs.endOfLastMinute()";
+        var event = new GlideRecord('sysevent');
+        event.addEncodedQuery(query);
+        event.orderBy("sys_created_on");
+        event.query();
+        // Send client response for each occurance of the target event within the current minute.
+        while (event.next()) {
+            if (!gs.nil(event.instance)) {
+                // Get the target record that the event was triggered from
+                var record = new GlideRecord(String(event.table));
+                if (record.get(event.instance)) {
+                    // Construct a HTML formated message for client browser processing.
+                    var messageOutput = [];
+                    messageOutput.push("<h2>" + String(event.parm1) + "</h2>");
+
+                    // Construct a JSON object for passing message and unique ID to client side.
+                    var outputObj = {};
+                    outputObj.message = messageOutput.toString();
+                    outputObj.id = String(event.sys_id);
+                    outputObj.instance = String(event.instance);
+                    outputObj.type = "";
+
+                    // Send message to client side browser using JSON object and event unique id. Use event-stream formatting as specified via the ServerSent protocol.
+                    g_processor.writeOutput("text/event-stream", "id: " + String(event.sys_id) + "\n" + "data: " + JSON.stringify(outputObj) + "\n\n");
+                }
+            }
+        }
+    }
+
+})(g_request, g_response, g_processor);]]></script>
+        <sys_class_name>sys_processor</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 15:07:49</sys_created_on>
+        <sys_id>802891372f3b501064e63f96f699b612</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ServerSent</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_update_name>sys_processor_802891372f3b501064e63f96f699b612</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 15:07:49</sys_updated_on>
+        <type>script</type>
+        <xframe_sameorigin>false</xframe_sameorigin>
+    </sys_processor>
+</record_update>

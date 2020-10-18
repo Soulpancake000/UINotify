@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysevent_register">
+    <sysevent_register action="INSERT_OR_UPDATE">
+        <caller_access/>
+        <description/>
+        <event_name>x_8899_ui_notify.async_call_complete</event_name>
+        <fired_by>Async callback function</fired_by>
+        <queue/>
+        <suffix>async_call_complete</suffix>
+        <sys_class_name>sysevent_register</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 14:52:22</sys_created_on>
+        <sys_id>f784d9332f3b501064e63f96f699b6b3</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_8899_ui_notify.async_call_complete</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_update_name>sysevent_register_f784d9332f3b501064e63f96f699b6b3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 15:46:32</sys_updated_on>
+        <table/>
+    </sysevent_register>
+</record_update>

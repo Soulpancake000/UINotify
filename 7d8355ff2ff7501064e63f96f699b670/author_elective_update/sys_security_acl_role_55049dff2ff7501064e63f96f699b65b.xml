@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="DELETE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 14:49:23</sys_created_on>
+        <sys_id>55049dff2ff7501064e63f96f699b65b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_8899_ui_notify_transaction_subscription.admin</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_security_acl display_value="x_8899_ui_notify_transaction_subscription">d1049dff2ff7501064e63f96f699b658</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_55049dff2ff7501064e63f96f699b65b</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 14:49:23</sys_updated_on>
+        <sys_user_role display_value="admin" name="admin">2831a114c611228501d4ea6c309d626d</sys_user_role>
+        <transaction_id/>
+    </sys_security_acl_role>
+    <sys_update_version action="INSERT_OR_UPDATE">
+        <action>DELETE</action>
+        <application display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</application>
+        <file_path/>
+        <instance_id>2296467edb13c0503050ac44d4961920</instance_id>
+        <instance_name>dev102394</instance_name>
+        <name>sys_security_acl_role_55049dff2ff7501064e63f96f699b65b</name>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role"><sys_security_acl_role action="INSERT_OR_UPDATE"><sys_class_name>sys_security_acl_role</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2020-10-18 14:49:23</sys_created_on><sys_id>55049dff2ff7501064e63f96f699b65b</sys_id><sys_mod_count>0</sys_mod_count><sys_name>x_8899_ui_notify_transaction_subscription.admin</sys_name><sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package><sys_policy/><sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope><sys_security_acl display_value="x_8899_ui_notify_transaction_subscription">d1049dff2ff7501064e63f96f699b658</sys_security_acl><sys_update_name>sys_security_acl_role_55049dff2ff7501064e63f96f699b65b</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2020-10-18 14:49:23</sys_updated_on><sys_user_role display_value="admin" name="admin">2831a114c611228501d4ea6c309d626d</sys_user_role><transaction_id/></sys_security_acl_role></record_update>]]></payload>
+        <payload_hash>671539735</payload_hash>
+        <record_name>x_8899_ui_notify_transaction_subscription.admin</record_name>
+        <reverted_from/>
+        <source>f18355ff2ff7501064e63f96f699b673</source>
+        <source_table>sys_update_set</source_table>
+        <state>previous</state>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 14:49:23</sys_created_on>
+        <sys_id>9d049dff2ff7501064e63f96f699b65d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_recorded_at>1753c2fbe610000001</sys_recorded_at>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 14:49:23</sys_updated_on>
+        <type>Access Roles</type>
+        <update_guid>d5049dffc0f750106d12a3c82a7c795d</update_guid>
+        <update_guid_history>d5049dffc0f750106d12a3c82a7c795d:671539735</update_guid_history>
+    </sys_update_version>
+    <sys_metadata_delete action="INSERT_OR_UPDATE">
+        <sys_audit_delete display_value="x_8899_ui_notify_transaction_subscription.admin">8744d1332f3b501064e63f96f699b6a3</sys_audit_delete>
+        <sys_class_name>sys_metadata_delete</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-10-18 14:50:35</sys_created_on>
+        <sys_db_object display_value="" name="sys_security_acl_role">sys_security_acl_role</sys_db_object>
+        <sys_id>4806e5f2fce24460a3678a509940a400</sys_id>
+        <sys_metadata>55049dff2ff7501064e63f96f699b65b</sys_metadata>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_8899_ui_notify_transaction_subscription.admin</sys_name>
+        <sys_package display_value="UI Notify" source="x_8899_ui_notify">7d8355ff2ff7501064e63f96f699b670</sys_package>
+        <sys_parent display_value="x_8899_ui_notify_transaction_subscription">d1049dff2ff7501064e63f96f699b658</sys_parent>
+        <sys_policy/>
+        <sys_scope display_value="UI Notify">7d8355ff2ff7501064e63f96f699b670</sys_scope>
+        <sys_scope_delete display_value="">29eac961faf740ecab76568cbf0e0964</sys_scope_delete>
+        <sys_update_name>sys_security_acl_role_55049dff2ff7501064e63f96f699b65b</sys_update_name>
+        <sys_update_version display_value="sys_security_acl_role_55049dff2ff7501064e63f96f699b65b">9d049dff2ff7501064e63f96f699b65d</sys_update_version>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-10-18 14:50:35</sys_updated_on>
+    </sys_metadata_delete>
+</record_update>
